@@ -66,8 +66,15 @@ function Save_Project( name, type) {                              //ZAPISYWANIE 
   text7=" window.prettyPrint && prettyPrint();}); </script>";
   text8="</body></html>";
   text=text1+text2+text3+text4+text5+text6+text7+text8;
-  var a = document.getElementById("a");
-  var file = new Blob([text], {type: type});
-  a.href = URL.createObjectURL(file);
-  a.download = name;
+  //var a = document.getElementById("a");
+  //var file = new Blob([text], {type: type});
+  //a.href = URL.createObjectURL(file);
+  //a.download = name;
+  var dict={'data':text , 'name':'IZA.html'};
+  $.ajax({
+	type:"POST",
+	url:'http://' + document.domain + ':' + location.port + '/uploads',
+	data:dict,
+	datatype:text
+  });
 }

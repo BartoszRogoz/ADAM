@@ -10,4 +10,3 @@ greenlet==0.4.2
 ipython==2.1.0
 itsdangerous==0.24
 pyreadline==2.0
-browsepy==0.5.6

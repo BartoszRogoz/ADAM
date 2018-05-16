@@ -1,8 +1,6 @@
-
-
 from flask.ext.socketio import SocketIO, emit
-from flask_cors import CORS
-from flask import Flask, render_template 
+import os
+from flask import Flask, render_template , request , send_from_directory
 
 from random import random
 from time import sleep
@@ -15,10 +13,16 @@ import datetime
 __author__ = 'Bartqu'
 
 
+
+
 app = Flask(__name__)
-CORS(app)
+
+
+
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
+
+
 
 #turn the flask app into a socketio app
 socketio = SocketIO(app)
@@ -115,9 +119,21 @@ def VizScada():
 
 @app.route('/Wiz')
 def V():
-    return render_template('Wiz.html')
+    return send_from_directory('/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects','IZA.html')
 
+@app.route('/uploads', methods=['GET', 'POST'])
+def save_upload():
+	if request.method=='POST' :
+		filepath = os.path.join("/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects",request.form['name'])
+		f=open(filepath ,"w+" )
+		f.write( request.form['data'])
+		f.close()
 
+		return ""
+	return ""
+
+	
+		
 
 	
 
