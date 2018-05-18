@@ -1,0 +1,142 @@
+
+
+from flask.ext.socketio import SocketIO, emit
+from flask_cors import CORS
+from flask import Flask, render_template 
+
+from random import random
+from time import sleep
+from threading import Thread, Event
+
+import json
+import serial
+import datetime
+
+__author__ = 'Bartqu'
+
+
+app = Flask(__name__)
+CORS(app)
+app.config['SECRET_KEY'] = 'secret!'
+app.config['DEBUG'] = True
+
+#turn the flask app into a socketio app
+socketio = SocketIO(app)
+
+#random number Generator Thread
+thread = Thread()
+thread_stop_event = Event()
+
+
+class RandomThread(Thread):
+    def __init__(self):
+        self.delay = 1
+        
+        super(RandomThread, self).__init__()
+
+    def randomNumberGenerator(self):
+        print "Making random numbers"
+	ser = serial.Serial(
+		    port='/dev/serial0',
+		    baudrate = 115200,
+		    parity=serial.PARITY_NONE,
+		    stopbits=serial.STOPBITS_ONE,
+		    bytesize=serial.EIGHTBITS
+		    #timesout=1	
+		    
+		)
+        while not thread_stop_event.isSet():
+            	stan=0
+		ilast=0
+		ik=0
+		data_str=""
+		last_data={}
+		lastfulldataindex=0
+		while True:
+			if (ser.inWaiting()>0 or len(data_str) >50):	
+				 data_str=data_str+ser.read(ser.inWaiting())			 
+				 for i,c in enumerate(data_str):
+					if c == "#" and stan==0:
+						stan=1
+						ilast=i
+					if c =="-" and stan==1:
+						times=int(data_str[ilast+1:i] )
+						times=str(datetime.timedelta(seconds=times))
+						last_data[times]=dict()
+						ilast=i
+						stan=2
+					if c==":" and stan==2:
+						name=data_str[ilast+3:i]
+						stan=3
+						ilast=i
+					if c=="\n" and stan==3:
+						data=data_str[ilast+1:i-1]
+						last_data[times][name]=data
+						stan=4
+						ilast=i
+						lastfulldataindex=i
+					if c=="$" and stan==4:
+						stan=0
+						ilast=i
+						
+						socketio.emit('newnumber', {'number': json.dumps(last_data)}, namespace='/test')
+						
+						last_data={}
+					if c==":" and stan==4: 
+						name=data_str[ilast+1:i]
+						stan=3
+						ilast=i
+						
+				 
+				 data_str=data_str[lastfulldataindex:]
+				 sleep(0.5)	
+			else :
+				
+			 	 sleep(0.1)
+           
+            
+          
+
+    def run(self):
+        self.randomNumberGenerator()
+
+
+
+
+
+
+@app.route('/')
+def index():
+    return render_template('main.html')
+
+@app.route('/VizScada')
+def VizScada():
+    return render_template('index.html')
+
+@app.route('/Wiz')
+def V():
+    return render_template('Wiz.html')
+
+
+
+	
+
+@socketio.on('connect', namespace='/test')
+def test_connect():
+    # need visibility of the global thread object
+    global thread
+    print('Client connected')
+    if not thread.isAlive():
+        print "Starting Thread"
+        thread = RandomThread()
+        thread.start()
+
+@socketio.on('disconnect', namespace='/test')
+def test_disconnect():
+    print('Client disconnected')
+
+
+if __name__ == '__main__':
+    
+    socketio.run(app, host='0.0.0.0')
+

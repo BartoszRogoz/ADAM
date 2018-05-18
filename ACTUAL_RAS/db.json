@@ -1,0 +1,19 @@
+{
+  "DANE": [
+    {
+      "id": 1,
+      "Nazwa": "ABC",
+      "Wartosc": 10
+    },
+    {
+      "id": 2,
+      "Nazwa": "String",
+      "Wartosc": "also typicode"
+    },
+    {
+      "id": 3,
+      "Nazwa": "Float",
+      "Wartosc": 12.36 
+    }
+  ]
+ }

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Bartosz Rogoz</title>
+
+        <meta name="description" content="Praca Magisterska - Bartosz Rogoz">
+        <meta name="author" content="Bartosz Rogoz">
+
+        <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    	<link href="static/css/style.css" rel="stylesheet">
+    	<link href="static/css/jquery-ui.css" rel="stylesheet">
+    	<link href="static/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+	 	<div class="col-md-12">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						 <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+					</button> <a class="navbar-brand" href="#">VizScada</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Program<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#">Nowy Zeszyt</a>
+								</li>
+                <li>
+									<a onclick="Load_Project()" href="javascript:void(0)">Wczytaj Zeszyt</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									<a href="#">Kompiluj</a>
+								</li>
+                <li>
+                  <a onclick="SwitchProject_Run()" href="javascript:void(0)">Uruchom</a>
+                </li>
+								<li class="divider">
+								</li>
+								<li>
+									<a onclick="Save_Project()" href="javascript:void(0)">Zapisz Zeszyt</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Wizualizacja<strong class="caret"></strong></a>
+              <ul class="dropdown-menu">
+
+                <li>
+                  <input type="file" id="myFile">
+                </li>
+                <li class="divider">
+                </li>
+
+                <li class="divider">
+                </li>
+                <li>
+                <a onclick="Save_Project('Wizualizacja.html', 'text/plain')">Kompiluj plik wizualizacji</a>
+              </la>
+                <li>
+                  <a  href="" id="a">Zapisz Wizualizację</a>
+                </li>
+
+              </ul>
+            </li>
+          </ul>
+					<ul class="nav navbar-nav">
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sever danych<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									<a onclick="CreateWizEngine('TEST.js', 'text/plain')">Kompiluj plik </a>
+								</li>
+								<li>
+									  <a  href="" id="b">Zapisz plik</a>
+								</li>
+
+								<li class="divider">
+								</li>
+								<li>
+									<a href="#">Konfiguruj</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+          <ul class="nav navbar-nav">
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sever historii<strong class="caret"></strong></a>
+							 <ul class="dropdown-menu">
+								<li>
+									<a href="#">Test Połączenia</a>
+								</li>
+								<li>
+									<a href="#"></a>
+								</li>
+
+								<li class="divider">
+								</li>
+								<li>
+									<a href="#">Konfiguruj</a>
+								</li>
+							</ul>
+						</li>
+					 </ul>
+				</div>
+
+			</nav>
+		</div>
+  </div>
+</div>      <!--MenuTOP      -->
+
+<div class="container-fluid">
+
+	<div class="row">
+		<div class="col-md-10">
+      <div class="panel panel-default">
+          <div class="panel-heading">#$NAZWA_WIZUALIZACJI</div>
+          <div class="panel-body" id='Wizualizacja-generator' style="height: 500px"></div>
+
+      </div>
+
+
+		</div>
+		<div class="col-md-2">
+			<div class="panel-group" id="Przybornik">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#Przybornik" href="#Przybornik-Wskazniki">Wskaźniki</a>
+					</div>
+					<div id='Przybornik-Wskazniki' class="panel-collapse collapse">
+						<div class="panel-body" style="max-height: 20px overflow-y: scroll; ">
+              <ul class="vertical ex" style="padding-left:0px;">
+                    <li><a href="javascript:void(0)" id="ON_OFFADD" class="add-widget" >Dioda</a></li>
+                    <li><a href="javascript:void(0)" id="ZBIORNIK_ADD" class="add-widget">Zbiornik</a></li>
+                    <li><a href="javascript:void(0)" id="ETYKIETA_ADD" class="add-widget">Etykieta</a></li>
+                    <li><a href="javascript:void(0)" id="SEVENDIG_ADD" class="add-widget">Wyświetlacz 7seg</a></li>
+                    <li><a href="javascript:void(0)" id="BUTTON_ADD" class="add-widget">Przycisk</a></li>
+
+                    <li><a href="javascript:void(0)">About</a></li>
+                </ul>
+						</div>
+					</div>
+				</div>
+        <div class="panel panel-default">
+					<div class="panel-heading">
+						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#Przybornik" href="#Przybornik-Rysuj">Rysuj</a>
+					</div>
+					<div id="Przybornik-Rysuj" class="panel-collapse collapse">
+						<div class="panel-body"  style="max-height: 20px overflow-y: scroll; ">
+              <ul class="vertical ex" style="padding-left:0px;">
+
+                    <li><a href="javascript:void(0)" id="LINIA_ADD" class="add-widget" >Linia</a></li>
+                    <li><a href="javascript:void(0)" id="CIRCLE_ADD" class="add-widget">Koło</a></li>
+                    <li><a href="javascript:void(0)" id="b" class="add-widget">Kwadrat</a></li>
+                    <li><a href="javascript:void(0)">About</a></li>
+                </ul>
+
+
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#Przybornik" href="#Przybornik-Silniki">Silniki</a>
+					</div>
+					<div id="Przybornik-Silniki" class="panel-collapse collapse">
+						<div class="panel-body">
+							Lista darageble silników
+						</div>
+					</div>
+				</div>
+        <div class="panel panel-default">
+					<div class="panel-heading">
+						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#Przybornik" href="#Kontrolka-Opcje">OPCJE</a>
+					</div>
+					<div id="Kontrolka-Opcje" class="panel-collapse collapse">
+						<div class="panel-body" id="Kontrolka-OpcjeADD">
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>      <!--codesection      -->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="comment">Program</label>
+          <textarea class="form-control" rows="10" id="CODE"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+  <!--  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <!--  <script src="static/js/socket.io.js"></script>-->
+    <script src="static/js/socket.io.min.js"></script>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+
+    <script src="static/js/jquery-ui.js"></script>
+    <script src="static/js/bootstrap-colorpicker.min.js"></script>
+    <script src="static/js/sevenSeg.js"></script>
+
+    <script src="static/js/Aplikacja.js"></script>
+    <script src="static/js/Silnik.js"></script>
+    <script src="static/js/Elementy.js"></script>
+
+
+</body>
+</html>
