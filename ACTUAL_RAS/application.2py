@@ -12,17 +12,10 @@ import datetime
 
 __author__ = 'Bartqu'
 
-
-
-
 app = Flask(__name__)
-
-
 
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
-
-
 
 #turn the flask app into a socketio app
 socketio = SocketIO(app)
@@ -128,7 +121,7 @@ def save_upload():
 		f=open(filepath ,"w+" )
 		f.write( request.form['data'])
 		f.close()
-
+		print os.listdir("/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects")
 		return ""
 	return ""
 
