@@ -6,7 +6,7 @@ function ON_OFFADD(){
                                       "<div id='ON_OFF_" + ON_OFFid.toString() + "' style= 'position: absolute; transform: scale(1.0);'> "+
                                       "<button type='button' class='btn btn-xs btn-danger pull-righ delete-wiget' style='float:right;'></button>"+
 
-                                        "<img class='Image alowresize' src='resources/Graphics/ON_OFF.png' width='50' height='50'>"+
+                                        "<img class='Image alowresize' src='static/graphics/ON_OFF.png' width='50' height='50'>"+
 
                                       "</div> " );
   $( "#ON_OFF_"+ ON_OFFid.toString()).draggable({ grid: [ 20, 20 ] , revert: "invalid"  });
@@ -90,7 +90,7 @@ function ZBIORNIK_ADD(){
                                         "<button type='button' class='btn btn-xs pull-righ' style='position: relative; left: 40px; '>+/-</button>"+
                                         "<button type='button' class='btn btn-xs btn-info pull-righ' data-toggle='modal' data-target='#myModal' style='position: relative; left: 43px; '>"+  ZBIORNIKid +"</button>"+
                                         "<button type='button' class='btn btn-xs btn-danger pull-righ delete-wiget' style='position: relative; left: 46px;'>x</button>"+
-                                        "<img  class='Image' src='resources/Graphics/001.png' width='130' height='150' style='position: relative; z-index: 1;'> "+
+                                        "<img  class='Image' src='static/graphics/001.png' width='130' height='150' style='position: relative; z-index: 1;'> "+
                                           "<div id= class='progress'  style='height: 35px; width: 110px; transform: rotate(-90deg); position: relative; top:-77px; left: -5px;'>"+
                                               "<div  class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width:"+ b +"%'>"+
                                               "</div> "+

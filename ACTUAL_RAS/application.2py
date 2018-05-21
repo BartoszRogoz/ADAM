@@ -1,6 +1,6 @@
 from flask.ext.socketio import SocketIO, emit
 import os
-from flask import Flask, render_template , request , send_from_directory
+from flask import Flask, render_template , request , send_from_directory, jsonify
 
 from random import random
 from time import sleep
@@ -110,17 +110,18 @@ def index():
 def VizScada():
     return render_template('index.html')
 
-@app.route('/Wiz')
-def V():
-    return send_from_directory('/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects','IZA.html')
 
-@app.route('/sterownik')
-    def get_sterdata():
-    		return os.listdir(request.form['path_project'])
+@app.route('/sterownik', methods=['GET', 'POST'])
+def get_sterdata():
+    return jsonify({'project_list': os.listdir(request.form['path_project'])})				#informacje na temat KONFIGURACJI
+
+@app.route('/projects', methods=['GET', 'POST'])							#Odsylanie gotowych projektow
+def get_project():
+    project=request.args.get('name')
+    return send_from_directory('/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects',project)
 
 
-
-@app.route('/uploads', methods=['GET', 'POST'])
+@app.route('/uploads', methods=['GET', 'POST'])								#zapisywanie wizualizacji
 def save_upload():
 	if request.method=='POST' :
 		filepath = os.path.join("/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects",request.form['name'])

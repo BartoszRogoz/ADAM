@@ -3,7 +3,14 @@
 <link href="static/css/main.css" rel="stylesheet">
 <script src="static/js/bootstrap.min.js"></script>
 <script src="static/js/main.js"></script>
+<div class='jumbotron text-center'>
+	<h1>Centrum Zarządzania</h1>
+	<p>Sterownikiem REALtime RASpi<p>
+</div>
+
 <div class="container">
+ <div class='row'>
+ <div class='col-sm-4'>
     <div class="panel panel-default">
         <div class="panel-heading">Struktura Sterownika</div>
         <div class="panel-body">
@@ -11,33 +18,12 @@
             <ul class="treeview">
                 <li><a href="#">Sterownik</a>
                 	<ul>
-            			<li><a href="#">Projekty</a></li>
-            			<li><a href="#"></a>
+            			<li id='Projekty'><a href="#">Projekty Wizualizacyjne</a>
+            			<li><a href="#">Zadeklarowane Zmienne</a>
             				<ul>
             					<li><a href="#">Stick</a></li>
             					<li><a href="#">Stick</a></li>
-            					<li><a href="#">Stick</a>
-            						<ul>
-            							<li><a href="#">Twig</a></li>
-            							<li><a href="#">Twig</a></li>
-            							<li><a href="#">Twig</a></li>
-            							<li><a href="#">Twig</a>
-            								<ul>
-            									<li><a href="#">Leaf</a></li>
-            									<li><a href="#">Leaf</a></li>
-            									<li><a href="#">Leaf</a></li>
-            									<li><a href="#">Leaf</a></li>
-            									<li><a href="#">Leaf</a></li>
-            									<li><a href="#">Leaf</a></li>
-            									<li><a href="#">Leaf</a></li>
-            									<li><a href="#">Leaf</a></li>
-            									<li><a href="#">Leaf</a></li>
-            								</ul>
-            							</li>
-            							<li><a href="#">Twig</a></li>
-            							<li><a href="#">Twig</a></li>
-            						</ul>
-            					</li>
+            					<li><a href="#">Stick</a></li>
             					<li><a href="#">Stick</a></li>
             				</ul>
             			</li>
@@ -48,17 +34,80 @@
             </ul>
             <!-- TREEVIEW CODE -->
         </div>
+	</div>
+	</div>
+	 <div class='row'>
+ <div class='col-sm-4'>
+    <div class="panel panel-default">
+        <div class="panel-heading">Przydatne Oprogranowanie</div>
+        <div class="panel-body">
+            <!-- TREEVIEW CODE -->
+            <ul class="treeview">
+                <li><a href="#">Sterownik</a>
+                	<ul>
+            			<li><a href="#">PROGStm-Programator Sterownika Czasu rzeczywistego</a>
+            			<li><a href="VizScada">VizScada- Generator Wizualizacji</a></li>
+            			<li><a href="#">Branch</a></li>
+            			<li><a href="#">Branch</a></li>
+            		</ul>
+            	</li>
+            </ul>
+            <!-- TREEVIEW CODE -->
+        </div>
+
+
+ </div >
+</div>
+<div class='row'>
+ <div class='col-sm-4'>
+    <div class="panel panel-default">
+        <div class="panel-heading">Globalny Konfigurator</div>
+        <div class="panel-body">
+            <!-- TREEVIEW CODE -->
+            <ul class="treeview">
+                <li><a href="#">RasPI</a>
+                	<ul>
+            			<li><a href="#">PROGStm-Programator Sterownika Czasu rzeczywistego</a></li>
+            			
+            		</ul>
+            	</li>
+		<li><a href="#">Stm</a>
+                	<ul>
+            			
+            			<li><a href="#">VizScada- Generator Wizualizacji</a></li>
+            			
+            		</ul>
+            	</li>
+            </ul>
+            <!-- TREEVIEW CODE -->
+        </div>
+
+
+ </div >
+</div>
     </div>
-    <scrip>
+
+    <script>
       dict={'path_project':'/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects'}
       $.ajax({
       type:"POST",
       url:'http://' + document.domain + ':' + location.port + '/sterownik',
       data:dict,
-      datatype:text,
+      datatype:'sad',
       success: function(data){
-        console.log(data);
-      }
+	
+        var Projekty='<ul>';
+	for(var x of data['project_list']){
+		Projekty+= '<li><a href=projects?name='+x+'>'+ x +'</a></li>';}
+	
+	Projekty+='</ul></li>';
+      
+        $('#Projekty').append(Projekty);
+	$('.treeview').each(function () {
+		var tree = $(this);
+		tree.treeview();
+	});
+	}
       });
 
 
