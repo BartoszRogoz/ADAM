@@ -28,7 +28,7 @@ thread_stop_event = Event()
 class RandomThread(Thread):
     def __init__(self):
         self.delay = 1
-        
+
         super(RandomThread, self).__init__()
 
     def randomNumberGenerator(self):
@@ -39,8 +39,8 @@ class RandomThread(Thread):
 		    parity=serial.PARITY_NONE,
 		    stopbits=serial.STOPBITS_ONE,
 		    bytesize=serial.EIGHTBITS
-		    #timesout=1	
-		    
+		    #timesout=1
+
 		)
         while not thread_stop_event.isSet():
             	stan=0
@@ -50,8 +50,8 @@ class RandomThread(Thread):
 		last_data={}
 		lastfulldataindex=0
 		while True:
-			if (ser.inWaiting()>0 or len(data_str) >50):	
-				 data_str=data_str+ser.read(ser.inWaiting())			 
+			if (ser.inWaiting()>0 or len(data_str) >50):
+				 data_str=data_str+ser.read(ser.inWaiting())
 				 for i,c in enumerate(data_str):
 					if c == "#" and stan==0:
 						stan=1
@@ -75,24 +75,24 @@ class RandomThread(Thread):
 					if c=="$" and stan==4:
 						stan=0
 						ilast=i
-						
+
 						socketio.emit('newnumber', {'number': json.dumps(last_data)}, namespace='/test')
-						
+
 						last_data={}
-					if c==":" and stan==4: 
+					if c==":" and stan==4:
 						name=data_str[ilast+1:i]
 						stan=3
 						ilast=i
-						
-				 
+
+
 				 data_str=data_str[lastfulldataindex:]
-				 sleep(0.5)	
+				 sleep(0.5)
 			else :
-				
+
 			 	 sleep(0.1)
-           
-            
-          
+
+
+
 
     def run(self):
         self.randomNumberGenerator()
@@ -114,6 +114,12 @@ def VizScada():
 def V():
     return send_from_directory('/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects','IZA.html')
 
+@app.route('/sterownik')
+    def get_sterdata():
+    		return os.listdir(request.form['path_project'])
+
+
+
 @app.route('/uploads', methods=['GET', 'POST'])
 def save_upload():
 	if request.method=='POST' :
@@ -125,10 +131,10 @@ def save_upload():
 		return ""
 	return ""
 
-	
-		
 
-	
+
+
+
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
@@ -146,6 +152,5 @@ def test_disconnect():
 
 
 if __name__ == '__main__':
-    
-    socketio.run(app, host='0.0.0.0')
 
+    socketio.run(app, host='0.0.0.0')
