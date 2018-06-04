@@ -50,54 +50,53 @@ class RandomThread(Thread):
 		last_data={}
 		lastfulldataindex=0
 		while True:
-			if (ser.inWaiting()>0 or len(data_str) >50):
+			if (ser.inWaiting()>0 ):
 				 data_str=data_str+ser.read(ser.inWaiting())
 				 for i,c in enumerate(data_str):
 					if c == "#" and stan==0:
+						lastfulldataindex=i
 						stan=1
 						ilast=i
 					if c =="-" and stan==1:
+						lastfulldataindex=i
 						times=int(data_str[ilast+1:i] )
 						times=str(datetime.timedelta(seconds=times))
 						last_data[times]=dict()
 						ilast=i
 						stan=2
 					if c==":" and stan==2:
-						name=data_str[ilast+3:i]
-						stan=3
-						ilast=i
-					if c=="\n" and stan==3:
-						data=data_str[ilast+1:i-1]
-						last_data[times][name]=data
-						stan=4
-						ilast=i
 						lastfulldataindex=i
-					if c=="$" and stan==4:
-						stan=0
-						ilast=i
-
-						socketio.emit('newnumber', {'number': json.dumps(last_data)}, namespace='/test')
-
-						last_data={}
-					if c==":" and stan==4:
 						name=data_str[ilast+1:i]
 						stan=3
 						ilast=i
-
-
+					if c==">" and stan==3:
+						lastfulldataindex=i
+						data=data_str[ilast+1:i]
+						last_data[times][name]=data
+						stan=2
+						ilast=i
+					if c=="$" and stan==3:
+						lastfulldataindex=i
+						data=data_str[ilast+1:i]
+						last_data[times][name]=data
+						stan=0
+						ilast=i
+						print last_data
+						socketio.emit('newnumber', {'number': json.dumps(last_data)}, namespace='/test')
+						last_data={}
 				 data_str=data_str[lastfulldataindex:]
-				 sleep(0.5)
+				 lastfulldatandex=0
+				 ilast=0
+				 sleep(0.0001)
 			else :
-
-			 	 sleep(0.1)
-
-
-
+			 	 sleep(0.001)
 
     def run(self):
         self.randomNumberGenerator()
 
-
+@socketio.on('set',namespace='/test')
+def seter(msg):
+     print msg['a']
 
 
 
@@ -108,17 +107,37 @@ def index():
 
 @app.route('/VizScada')
 def VizScada():
-    return render_template('index.html')
+    return render_template('ProgViz.html')
+@app.route('/ProgStm')
+def ProgStm():
+    return render_template('ProgStm.html')
 
 
 @app.route('/sterownik', methods=['GET', 'POST'])
 def get_sterdata():
-    return jsonify({'project_list': os.listdir(request.form['path_project'])})				#informacje na temat KONFIGURACJI
+     a={}
+     a['path_project']=dict()
+
+     for dirName, subdirList, fileList in os.walk(request.form['path_project']):
+        a['path_project'][(dirName.rsplit('/',1))[-1]]=[]
+        for fname in fileList:
+          try:
+            a['path_project'][(dirName.rsplit('/',1))[-1]].append(fname)
+          except KeyError:
+            print 'errror'
+
+     return jsonify({'project_list': a })
 
 @app.route('/projects', methods=['GET', 'POST'])							#Odsylanie gotowych projektow
 def get_project():
-    project=request.args.get('name')
-    return send_from_directory('/home/pi/Desktop/GIT/ADAM/ACTUAL_RAS/templates/Projects',project)
+    name=request.args.get('name')
+    project=request.args.get('project')
+    print name
+    print project
+    url=os.path.dirname(os.path.realpath(__file__))+ '/templates/Projects/' + project
+    print url
+    return send_from_directory(url ,name)
+
 
 
 @app.route('/uploads', methods=['GET', 'POST'])								#zapisywanie wizualizacji

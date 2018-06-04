@@ -1,6 +1,3 @@
-var LINKER_ARRAY ;
-var RUN=true;
-var PROJECT=true;
 
 
 
@@ -18,11 +15,8 @@ function SEVENDIG_VAR(a,b){
 //Project_Run/////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
-$(document).ready(function(){
-    var socket =io.connect("http://192.168.137.100:5000/test");
-    socket.on('newnumber',function(msg){
-      if(RUN==true){ LINKER_ARRAY=JSON.parse(msg.number); RUN=false; }
-    })
+
+
 
 
   //$("#ZBIORNIK_0 > div > div").css({'width': prc});
@@ -33,4 +27,3 @@ $(document).ready(function(){
 //  else iArrayValue = iArrayValue + 0.001;
 
 //console.log(localStorage.getItem("ETYKIETA_0"));
-});
